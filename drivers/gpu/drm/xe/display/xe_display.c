@@ -363,6 +363,8 @@ void xe_display_pm_shutdown(struct xe_device *xe)
 
 void xe_display_pm_runtime_suspend(struct xe_device *xe)
 {
+	struct intel_display *display = &xe->display;
+
 	if (!xe->info.probe_display)
 		return;
 
@@ -371,6 +373,7 @@ void xe_display_pm_runtime_suspend(struct xe_device *xe)
 		return;
 	}
 
+	intel_display_power_suspend(display);
 	intel_hpd_poll_enable(xe);
 }
 
@@ -471,6 +474,8 @@ void xe_display_pm_resume(struct xe_device *xe)
 
 void xe_display_pm_runtime_resume(struct xe_device *xe)
 {
+	struct intel_display *display = &xe->display;
+
 	if (!xe->info.probe_display)
 		return;
 
@@ -479,6 +484,7 @@ void xe_display_pm_runtime_resume(struct xe_device *xe)
 		return;
 	}
 
+	intel_display_power_resume(display);
 	intel_hpd_init(xe);
 	intel_hpd_poll_disable(xe);
 	skl_watermark_ipc_update(xe);
