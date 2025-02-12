@@ -1,0 +1,28 @@
+drm drm-fixes a64dcfb451e254085a7daee5fe51bf22959d52d3
+	Linux 6.14-rc2
+drm-misc drm-misc-fixes 9ab127a18018fb06bd42a54ed38bb7b8c449d686
+	drm/hisilicon/hibmc: select CONFIG_DRM_DISPLAY_DP_HELPER
+drm-intel drm-intel-fixes 53139b3f9998ea07289e7b70b909fea2264a0de9
+	drm/i915/selftests: avoid using uninitialized context
+drm-xe drm-xe-fixes e977499820782ab1c69f354d9f41b6d9ad1f43d9
+	drm/xe: Carve out wopcm portion from the stolen memory
+drm drm-next a64dcfb451e254085a7daee5fe51bf22959d52d3
+	Linux 6.14-rc2
+drm-misc drm-misc-next-fixes ecee4d0695067ae04959b121028b42a588e75370
+	accel/amdxdna: Add MODULE_FIRMWARE() declarations
+drm-intel drm-intel-next-fixes 2014c95afecee3e76ca4a56956a936e23283f05b
+	Linux 6.14-rc1
+drm-xe drm-xe-next-fixes 8dcb26b493d3bab90851f93ae1c127af5cb2dbb5
+	Merge tag 'amd-drm-fixes-6.14-2025-01-29' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+drm-misc drm-misc-next f4dd4cb79f9ec3294e5100223ed90d8ae371f168
+	drm/panel: visionox-r66451: transition to mipi_dsi wrapped functions
+drm-intel drm-intel-next 46e2ffbdd2a0835ec3918606cd183b158c3f0e91
+	drm/i915/pch: Remove unused i915->pch_id
+drm-intel drm-intel-gt-next fc2ef5b6e1ab9717b1a0b588a39b410864091fa9
+	selftests: i915: Use struct_size() helper in kmalloc()
+drm-xe drm-xe-next b7446752e5d3de98bf26b5d3a7ca4fe9165ec779
+	drm/xe/display: Add missing watermark ipc update at runtime resume
+drm-intel topic/core-for-CI 69a373f3b198bfdbaaf68a38ea400136b7ed329c
+	Revert "lockdep: Enable PROVE_RAW_LOCK_NESTING with PROVE_LOCKING."
+drm-xe topic/xe-for-CI 6ea369b34748ef5377f23e24b577912585ce5445
+	drm/xe/ptl: Define HuC FW version for PTL
