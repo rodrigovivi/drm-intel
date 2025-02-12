@@ -65,6 +65,12 @@
 
 #include <generated/xe_wa_oob.h>
 
+struct xe_device_remove_action {
+	struct list_head node;
+	xe_device_remove_action_t remove;
+	void *data;
+};
+
 static int xe_file_open(struct drm_device *dev, struct drm_file *file)
 {
 	struct xe_device *xe = to_xe_device(dev);
@@ -746,6 +752,9 @@ int xe_device_probe(struct xe_device *xe)
 	u8 last_gt;
 	u8 id;
 
+	xe->probing = true;
+	INIT_LIST_HEAD(&xe->remove_action_list);
+
 	xe_pat_init_early(xe);
 
 	err = xe_sriov_init(xe);
@@ -886,6 +895,8 @@ int xe_device_probe(struct xe_device *xe)
 
 	xe_vsec_init(xe);
 
+	xe->probing = false;
+
 	return devm_add_action_or_reset(xe->drm.dev, xe_device_sanitize, xe);
 
 err_fini_display:
@@ -905,6 +916,72 @@ err_fini_gt:
 err:
 	xe_display_fini(xe);
 	return err;
+}
+
+/**
+ * xe_device_call_remove_actions - Call the remove actions
+ * @xe: xe device instance
+ *
+ * This is only to be used by xe_pci and xe_device to call the remove actions
+ * while removing the driver or handling probe failures.
+ */
+void xe_device_call_remove_actions(struct xe_device *xe)
+{
+	struct xe_device_remove_action *ra, *tmp;
+
+	list_for_each_entry_safe(ra, tmp, &xe->remove_action_list, node) {
+		ra->remove(xe, ra->data);
+		list_del(&ra->node);
+		kfree(ra);
+	}
+
+	xe->probing = false;
+}
+
+/**
+ * xe_device_add_action_or_reset - Add an action to run on driver removal
+ * @xe: xe device instance
+ * @ra: pointer to the object embedded into the object to cleanup
+ * @remove: function to execute. The @ra is passed as argument
+ *
+ * Example:
+ *
+ * .. code-block:: c
+ *
+ *	static void foo_remove(struct xe_device_remove_action *ra)
+ *	{
+ *		struct xe_foo *foo = container_of(ra, struct xe_foo, remove_action);
+ *		...
+ *	}
+ *
+ *	int xe_foo_init(struct xe_foo *foo)
+ *	{
+ *		...
+ *		xe_device_add_remove_action(xe, &foo->remove_action, foo_remove);
+ *		...
+ *		return 0;
+ *	};
+ */
+int xe_device_add_action_or_reset(struct xe_device *xe,
+				  xe_device_remove_action_t action,
+				  void *data)
+{
+	struct xe_device_remove_action *ra;
+
+	drm_WARN_ON(&xe->drm, !xe->probing);
+
+	ra = kmalloc(sizeof(*ra), GFP_KERNEL);
+	if (!ra) {
+		action(xe, data);
+		return -ENOMEM;
+	}
+
+	INIT_LIST_HEAD(&ra->node);
+	ra->remove = action;
+	ra->data = data;
+	list_add(&ra->node, &xe->remove_action_list);
+
+	return 0;
 }
 
 static void xe_device_remove_display(struct xe_device *xe)
@@ -932,6 +1009,8 @@ void xe_device_remove(struct xe_device *xe)
 
 	for_each_gt(gt, xe, id)
 		xe_gt_remove(gt);
+
+	xe_device_call_remove_actions(xe);
 }
 
 void xe_device_shutdown(struct xe_device *xe)

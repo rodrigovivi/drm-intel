@@ -35,6 +35,7 @@
 #include "intel_display_device.h"
 #endif
 
+struct xe_device;
 struct xe_ggtt;
 struct xe_pat_ops;
 struct xe_pxp;
@@ -69,6 +70,8 @@ struct xe_pxp;
 	_Generic(tile__,								\
 		 const struct xe_tile * : (const struct xe_device *)((tile__)->xe),	\
 		 struct xe_tile * : (tile__)->xe)
+
+typedef void (*xe_device_remove_action_t)(struct xe_device *xe, void *data);
 
 /**
  * struct xe_vram_region - memory region structure
@@ -427,6 +430,20 @@ struct xe_device {
 
 	/** @tiles: device tiles */
 	struct xe_tile tiles[XE_MAX_TILES_PER_DEVICE];
+
+	/**
+	 * @remove_action_list: list of actions to execute on device remove.
+	 * Use xe_device_add_remove_action() for that. Actions can only be added
+	 * during probe and are executed during the call from PCI subsystem to
+	 * remove the driver from the device.
+	 */
+	struct list_head remove_action_list;
+
+	/**
+	 * @probing: cover the section in which @remove_action_list can be used
+	 * to post cleaning actions
+	 */
+	bool probing;
 
 	/**
 	 * @mem_access: keep track of memory access in the device, possibly
