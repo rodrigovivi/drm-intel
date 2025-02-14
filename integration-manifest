@@ -1,0 +1,28 @@
+drm drm-fixes 04485cc34868892a823b909c6d5468ba21b63569
+	Merge tag 'drm-xe-fixes-2025-02-13' of https://gitlab.freedesktop.org/drm/xe/kernel into drm-fixes
+drm-misc drm-misc-fixes a8972d5a49b408248294b5ecbdd0a085e4726349
+	drm: panel: jd9365da-h3: fix reset signal polarity
+drm-intel drm-intel-fixes 53139b3f9998ea07289e7b70b909fea2264a0de9
+	drm/i915/selftests: avoid using uninitialized context
+drm-xe drm-xe-fixes e977499820782ab1c69f354d9f41b6d9ad1f43d9
+	drm/xe: Carve out wopcm portion from the stolen memory
+drm drm-next 0ed1356af8f629ae807963b7db4e501e3b580bc2
+	Merge tag 'drm-misc-next-2025-02-12' of https://gitlab.freedesktop.org/drm/misc/kernel into drm-next
+drm-misc drm-misc-next-fixes ecee4d0695067ae04959b121028b42a588e75370
+	accel/amdxdna: Add MODULE_FIRMWARE() declarations
+drm-intel drm-intel-next-fixes 2014c95afecee3e76ca4a56956a936e23283f05b
+	Linux 6.14-rc1
+drm-xe drm-xe-next-fixes 8dcb26b493d3bab90851f93ae1c127af5cb2dbb5
+	Merge tag 'amd-drm-fixes-6.14-2025-01-29' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+drm-misc drm-misc-next 41129e236f14c6c54145c722da06f6793e9fd13d
+	drm/amdgpu: Enable async flip on overlay planes
+drm-intel drm-intel-next bccb18c5617a8fb7f6cb2b6d93ae6f2657842929
+	drm/i915/psr: Allow DSB usage when PSR is enabled
+drm-intel drm-intel-gt-next c088387ddd6482b40f21ccf23db1125e8fa4af7e
+	drm/i915/gt: Use spin_lock_irqsave() in interruptible context
+drm-xe drm-xe-next 1ed591582b7b894d2f7e7ab5cef2e9b0b6fef12b
+	drm/xe/display: Remove hpd cancel work sync from runtime pm path
+drm-intel topic/core-for-CI 69a373f3b198bfdbaaf68a38ea400136b7ed329c
+	Revert "lockdep: Enable PROVE_RAW_LOCK_NESTING with PROVE_LOCKING."
+drm-xe topic/xe-for-CI 6ea369b34748ef5377f23e24b577912585ce5445
+	drm/xe/ptl: Define HuC FW version for PTL
